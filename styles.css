@@ -1,0 +1,67 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 50px;
+}
+
+header {
+    align-items: center;
+    text-align: center;
+    margin-top: 20%;
+    margin: auto;
+    width: 50%;
+    padding-right: 5%;
+    padding-left: 5%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: rgb(180, 180, 180);
+    border-radius: 10px;
+}
+
+header form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+header button {
+    background-color: white;
+    border: 0;
+    width: 100px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 50px;
+    border-radius: 10px;
+}
+
+#auth-button {
+    background-color: #4285f4;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.flex-head-left {
+    flex: 80%;
+}
+
+.flex-head-right {
+    flex: 20%;
+}
+
+@media (max-width: 600px) {
+    header {
+        width: 90%;
+        margin-top: 10%;
+    }
+
+    header button {
+        margin-left: 20px;
+        width: 80px;
+    }
+}

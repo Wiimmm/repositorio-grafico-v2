@@ -143,8 +143,7 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
                 type: tipo,
                 lastModified: ultimaEdicao,
                 importatedDate: importacao,
-                previewPaths: previewPaths,
-                zipPath: `${tipo}/${nomeSemExtensao}/${nomeSemExtensao}.zip`
+                previewPaths: previewPaths
             });
 
             URL.revokeObjectURL(pdfUrl);

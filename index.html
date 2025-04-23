@@ -6,13 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Repositorio de PowerPoints</title>
     <link rel="stylesheet" href="styles.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
+    <!--Select2Lib-->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 
 <body>
     <header>
         <button id="auth-button" onclick="handleAuth()">Login com Google</button>
+        <div id="infos">
+            <p class="flex-inputinfo-left" id="filename">Nome: </p>
+            <select class="flex-inputinfo-right" name="state">
+                <option value="DS">Grafismo</option>
+                <option value="DOC">Documento</option>
+                <option value="PPT">Apresentação</option>
+              </select>
+        </div>
         <form id="upload-form">
-            <input class="flex-head-left" id="inputfile" type="file" multiple accept=".pptx">
+            <input class="flex-head-left" id="inputfile" type="file"">
             <button class="flex-head-right" type="submit">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16">
                     <path fill="currentColor" fill-rule="evenodd"

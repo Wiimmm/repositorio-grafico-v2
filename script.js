@@ -13,6 +13,40 @@ function handleAuth() {
     }).requestAccessToken();
 }
 
+document.getElementById('inputfile').addEventListener('change', function(event) {
+    $(document).ready(function() {
+        $('.flex-inputinfo-right').select2();
+    });
+
+    let valor = null;
+    const file = event.target.files[0];
+    if (!file){
+        console.log("No file selected");
+        return;
+    }
+
+    else{
+        const namefile = file.name;
+        document.getElementById('filename').innerHTML = "Nome: " + namefile;
+        
+        const ext = file.name.split('.').pop().toLowerCase();
+        if (ext == 'pdf' || ext == 'docx') {
+            valor = 'DOC';
+        } else if (ext == 'png' || ext == 'jpg' || ext == 'jpeg') {
+            valor = 'DS';
+        }
+        else if (ext == 'pptx') {
+            valor = 'PPT';
+        }
+    }
+
+    if (valor) {
+        $('.flex-inputinfo-right').val(valor).trigger('change');
+    } else {
+        console.log("No valid file type selected");
+    }
+});
+
 document.getElementById('upload-form').addEventListener('submit', async (event) => {
     event.preventDefault();
 

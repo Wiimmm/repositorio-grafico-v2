@@ -53,25 +53,44 @@ header button {
     margin-bottom: 20px;
 }
 
-.flex-inputinfo-left{
+.flex-inputinfo-left {
     flex: 50%;
     background-color: white;
     padding: 10px;
     padding-left: 13px;
     border-radius: 13px;
-    margin-bottom: 20px;;
     margin-bottom: 20px;
 }
 
-.flex-inputinfo-right{
+.flex-inputinfo-right {
     flex: 50%;
     background-color: white;
     padding: 10px;
     padding-left: 13px;
     border-radius: 10px;
-    margin-bottom: 20px;;
     margin-bottom: 20px;
     margin-left: 50px;
+}
+
+#project-select {
+    margin-left: 50px;
+    width: 100%;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    height: 40px;
+    padding: 10px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 20px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 40px;
 }
 
 .flex-head-left {
@@ -91,5 +110,13 @@ header button {
     header button {
         margin-left: 20px;
         width: 80px;
+    }
+
+    .flex-inputinfo-right {
+        margin-left: 20px;
+    }
+
+    #project-select {
+        margin-left: 20px;
     }
 }

@@ -1,7 +1,6 @@
 const CLIENT_ID = '25371662123-opqktsrvje4ab91s0i9e4lt0bgvmo1g2.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly';
 let accessToken;
-let valor = null;
 
 function handleAuth() {
     google.accounts.oauth2.initTokenClient({
@@ -14,11 +13,43 @@ function handleAuth() {
     }).requestAccessToken();
 }
 
-document.getElementById('inputfile').addEventListener('change', function(event) {
-    $(document).ready(function() {
-        $('.flex-inputinfo-right').select2();
+// Initialize Select2 for file type and project
+function initializeSelect2() {
+    $('#file-type').select2();
+    $('#project-select').select2({
+        tags: true,
+        placeholder: "Selecione ou adicione um projeto",
+        allowClear: true
     });
+}
 
+// Load existing projects from imported-db.json
+async function loadProjects() {
+    try {
+        const directoryHandle = await window.showDirectoryPicker({
+            startIn: 'documents',
+            mode: 'readwrite'
+        });
+        const db = await getDatabase(directoryHandle);
+        const projects = [...new Set(db.files.map(file => file.project).filter(project => project))]; // Unique projects
+        const $projectSelect = $('#project-select');
+        $projectSelect.empty(); // Clear existing options
+        projects.forEach(project => {
+            const option = new Option(project, project, false, false);
+            $projectSelect.append(option);
+        });
+        $projectSelect.trigger('change'); // Refresh Select2
+        return directoryHandle; // Return handle for later use
+    } catch (error) {
+        console.error('Erro ao carregar projetos:', error);
+        return null;
+    }
+}
+
+document.getElementById('inputfile').addEventListener('change', function(event) {
+    initializeSelect2();
+
+    let valor = null;
     const file = event.target.files[0];
     if (!file){
         console.log("No file selected");
@@ -31,20 +62,26 @@ document.getElementById('inputfile').addEventListener('change', function(event) 
         
         const ext = file.name.split('.').pop().toLowerCase();
         if (ext == 'pdf' || ext == 'docx') {
-            valor = 'Documento';
+            valor = 'DOC';
         } else if (ext == 'png' || ext == 'jpg' || ext == 'jpeg' || ext == 'svg') {
-            valor = 'Grafismo';
+            valor = 'DS';
         }
         else if (ext == 'pptx') {
-            valor = 'Apresentação';
+            valor = 'PPT';
         }
     }
 
     if (valor) {
-        $('.flex-inputinfo-right').val(valor).trigger('change');
+        $('#file-type').val(valor).trigger('change');
     } else {
         console.log("No valid file type selected");
     }
+});
+
+// Initialize Select2 on page load and load projects
+$(document).ready(function() {
+    initializeSelect2();
+    loadProjects();
 });
 
 document.getElementById('upload-form').addEventListener('submit', async (event) => {
@@ -55,6 +92,12 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
 
     if (arquivos.length === 0) {
         alert('Nenhum arquivo selecionado!');
+        return;
+    }
+
+    const project = $('#project-select').val();
+    if (!project) {
+        alert('Selecione ou adicione um projeto!');
         return;
     }
 
@@ -171,9 +214,9 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
                 id: nextId++,
                 name: nome,
                 type: tipo,
-                GroupType: valor,
+                project: project,
                 lastModified: ultimaEdicao,
-                importatedDate: importacao,
+                importedDate: importacao,
                 previewPaths: previewPaths
             });
 
@@ -184,6 +227,16 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
         db.lastUpdate = formatDateTime(new Date());
         await saveDatabase(directoryHandle, db);
         console.log('JSON atualizado com sucesso!');
+
+        // Update Select2 options with new project
+        const projects = [...new Set(db.files.map(file => file.project).filter(project => project))];
+        const $projectSelect = $('#project-select');
+        $projectSelect.empty();
+        projects.forEach(project => {
+            const option = new Option(project, project, false, false);
+            $projectSelect.append(option);
+        });
+        $projectSelect.val(null).trigger('change'); // Clear selection
     } catch (err) {
         console.error('Erro ao processar os arquivos:', err);
         alert('Ocorreu um erro ao processar os arquivos!');

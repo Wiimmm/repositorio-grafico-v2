@@ -13,7 +13,6 @@ function handleAuth() {
     }).requestAccessToken();
 }
 
-// Initialize Select2 for file type and project
 function initializeSelect2() {
     $('#file-type').select2();
     $('#project-select').select2({
@@ -21,29 +20,6 @@ function initializeSelect2() {
         placeholder: "Selecione ou adicione um projeto",
         allowClear: true
     });
-}
-
-// Load existing projects from imported-db.json
-async function loadProjects() {
-    try {
-        const directoryHandle = await window.showDirectoryPicker({
-            startIn: 'documents',
-            mode: 'readwrite'
-        });
-        const db = await getDatabase(directoryHandle);
-        const projects = [...new Set(db.files.map(file => file.project).filter(project => project))]; // Unique projects
-        const $projectSelect = $('#project-select');
-        $projectSelect.empty(); // Clear existing options
-        projects.forEach(project => {
-            const option = new Option(project, project, false, false);
-            $projectSelect.append(option);
-        });
-        $projectSelect.trigger('change'); // Refresh Select2
-        return directoryHandle; // Return handle for later use
-    } catch (error) {
-        console.error('Erro ao carregar projetos:', error);
-        return null;
-    }
 }
 
 document.getElementById('inputfile').addEventListener('change', function(event) {
@@ -56,19 +32,16 @@ document.getElementById('inputfile').addEventListener('change', function(event) 
         return;
     }
 
-    else{
-        const namefile = file.name;
-        document.getElementById('filename').innerHTML = "Nome: " + namefile;
-        
-        const ext = file.name.split('.').pop().toLowerCase();
-        if (ext == 'pdf' || ext == 'docx') {
-            valor = 'DOC';
-        } else if (ext == 'png' || ext == 'jpg' || ext == 'jpeg' || ext == 'svg') {
-            valor = 'DS';
-        }
-        else if (ext == 'pptx') {
-            valor = 'PPT';
-        }
+    const namefile = file.name;
+    document.getElementById('filename').innerHTML = "Nome: " + namefile;
+    
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (ext === 'pdf' || ext === 'docx') {
+        valor = 'DOC';
+    } else if (['png', 'jpg', 'jpeg', 'svg'].includes(ext)) {
+        valor = 'DS';
+    } else if (ext === 'pptx') {
+        valor = 'PPT';
     }
 
     if (valor) {
@@ -78,10 +51,8 @@ document.getElementById('inputfile').addEventListener('change', function(event) 
     }
 });
 
-// Initialize Select2 on page load and load projects
 $(document).ready(function() {
     initializeSelect2();
-    loadProjects();
 });
 
 document.getElementById('upload-form').addEventListener('submit', async (event) => {
@@ -130,7 +101,6 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
             const extensionFolder = await directoryHandle.getDirectoryHandle(tipo, { create: true });
             const fileNameFolder = await extensionFolder.getDirectoryHandle(nomeSemExtensao, { create: true });
 
-            // Save original file
             const fileHandle = await fileNameFolder.getFileHandle(nome, { create: true });
             const writable = await fileHandle.createWritable();
             await writable.write(arquivo);
@@ -142,7 +112,6 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
                     continue;
                 }
 
-                // Upload para Google Drive
                 const searchRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${nome}' and trashed=false and mimeType='application/vnd.google-apps.presentation'&fields=files(id,name)`, {
                     headers: { Authorization: 'Bearer ' + accessToken },
                 });
@@ -174,7 +143,6 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
                     uploadData = await uploadRes.json();
                 }
 
-                // Exportar como PDF
                 const exportRes = await fetch(`https://www.googleapis.com/drive/v3/files/${uploadData.id}/export?mimeType=application/pdf`, {
                     method: 'GET',
                     headers: { Authorization: 'Bearer ' + accessToken },
@@ -183,10 +151,8 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
                 const pdfUrl = URL.createObjectURL(pdfBlob);
                 const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
 
-                // Create preview folder for PPTX
                 const previewFolder = await previewsFolder.getDirectoryHandle(`${nomeSemExtensao}-preview`, { create: true });
 
-                // Extract and save slides as PNG
                 for (let i = 1; i <= pdf.numPages; i++) {
                     const page = await pdf.getPage(i);
                     const viewport = page.getViewport({ scale: 2 });
@@ -209,7 +175,6 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
                 URL.revokeObjectURL(pdfUrl);
             }
 
-            // Atualizar banco de dados
             db.files.push({
                 id: nextId++,
                 name: nome,
@@ -223,12 +188,10 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
             alert(`Arquivo ${nome} processado e salvo com sucesso!`);
         }
 
-        // Atualizar e salvar JSON
         db.lastUpdate = formatDateTime(new Date());
         await saveDatabase(directoryHandle, db);
         console.log('JSON atualizado com sucesso!');
 
-        // Update Select2 options with new project
         const projects = [...new Set(db.files.map(file => file.project).filter(project => project))];
         const $projectSelect = $('#project-select');
         $projectSelect.empty();
@@ -236,7 +199,7 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
             const option = new Option(project, project, false, false);
             $projectSelect.append(option);
         });
-        $projectSelect.val(null).trigger('change'); // Clear selection
+        $projectSelect.val(null).trigger('change');
     } catch (err) {
         console.error('Erro ao processar os arquivos:', err);
         alert('Ocorreu um erro ao processar os arquivos!');

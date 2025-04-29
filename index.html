@@ -4,19 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repositorio de PowerPoints</title>
+    <title>Repositório de PowerPoints</title>
     <link rel="stylesheet" href="styles.css">
 
+    <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <!--Select2Lib-->
+    <!-- Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+    </script>
+
+    <!-- Google Auth -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Favicon (opcional) -->
+    <link rel="icon" href="data:,">
 </head>
 
 <body>
     <header>
         <button id="auth-button" onclick="handleAuth()">Login com Google</button>
+
         <div id="infos">
             <p class="flex-inputinfo-left" id="filename">Nome: </p>
             <select class="flex-inputinfo-right" id="file-type" name="state">
@@ -28,6 +42,7 @@
                 placeholder="Selecione ou adicione um projeto">
             </select>
         </div>
+
         <form id="upload-form">
             <input class="flex-head-left" id="inputfile" type="file">
             <button class="flex-head-right" type="submit">
@@ -39,13 +54,7 @@
         </form>
     </header>
 
-    <!-- Bibliotecas -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script
-        src="https:// =require('./fs').readFileSync('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-
     <script src="script.js"></script>
-    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9355e9d44aa653d2',t:'MTc0NTUwMDk4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
 </body>
 
 </html>

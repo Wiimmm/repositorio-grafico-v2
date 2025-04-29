@@ -163,13 +163,13 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
 
                     await page.render({ canvasContext: context, viewport }).promise;
 
-                    const dataUrl = canvas.toDataURL('image/png');
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.5);
                     const slideBlob = await fetch(dataUrl).then(res => res.blob());
-                    const previewHandle = await previewFolder.getFileHandle(`slide-${i}.png`, { create: true });
+                    const previewHandle = await previewFolder.getFileHandle(`slide-${i}.jpeg`, { create: true });
                     const previewWritable = await previewHandle.createWritable();
                     await previewWritable.write(slideBlob);
                     await previewWritable.close();
-                    previewPaths.push(`previews/${nomeSemExtensao}-preview/slide-${i}.png`);
+                    previewPaths.push(`previews/${nomeSemExtensao}-preview/slide-${i}.jpeg`);
                 }
 
                 URL.revokeObjectURL(pdfUrl);

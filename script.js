@@ -15,9 +15,15 @@ function handleAuth() {
 
 function initializeSelect2() {
     $('#file-type').select2();
+    $('#file-lang').select2();
     $('#project-select').select2({
         tags: true,
         placeholder: "Selecione ou adicione um projeto",
+        allowClear: true
+    });
+    $('#client-select').select2({
+        tags: true,
+        placeholder: "Selecione ou adicione um cliente",
         allowClear: true
     });
 }
@@ -33,9 +39,23 @@ document.getElementById('inputfile').addEventListener('change', function(event) 
     }
 
     const namefile = file.name;
-    document.getElementById('filename').innerHTML = "Nome: " + namefile;
+    const namesplited = namefile.split('.');
+    const filenamesplited = namesplited.slice(0, -1).join('.');
+
+    console.log("File name: " + filenamesplited);
+
+    const year = file.lastModifiedDate.getFullYear();
+    document.getElementById('year').innerHTML = "Ano: " + year;
+    document.getElementById('filename').innerHTML = "Nome: " + filenamesplited;
     
     const ext = file.name.split('.').pop().toLowerCase();
+    if (ext === 'pptx') {
+        // Envia para o Google Drive, converte para PDF e gera a preview
+        uploadAndConvertToPDF(file);
+    } else {
+        console.log("Arquivo não suportado para conversão.");
+    }
+
     if (ext === 'pdf' || ext === 'docx') {
         valor = 'DOC';
     } else if (['png', 'jpg', 'jpeg', 'svg'].includes(ext)) {
@@ -51,6 +71,79 @@ document.getElementById('inputfile').addEventListener('change', function(event) 
     }
 });
 
+async function uploadAndConvertToPDF(file) {
+    if (!accessToken) {
+        alert('Faça login no Google primeiro!');
+        return;
+    }
+
+    const nome = file.name;
+    const formData = new FormData();
+    formData.append('metadata', new Blob([JSON.stringify({
+        name: nome,
+        mimeType: 'application/vnd.google-apps.presentation'
+    })], { type: 'application/json' }));
+    formData.append('file', file);
+
+    try {
+        // Envia o arquivo PPTX para o Google Drive
+        const uploadRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&convert=true', {
+            method: 'POST',
+            headers: new Headers({ Authorization: 'Bearer ' + accessToken }),
+            body: formData,
+        });
+        const uploadData = await uploadRes.json();
+        const fileId = uploadData.id;
+        console.log('Arquivo enviado e convertido para Google Drive:', fileId);
+
+        // Exporta o arquivo convertido para PDF
+        const exportRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}/export?mimeType=application/pdf`, {
+            method: 'GET',
+            headers: { Authorization: 'Bearer ' + accessToken },
+        });
+        const pdfBlob = await exportRes.blob();
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+
+        // Gera as previews diretamente do PDF
+        generatePreviewFromPDF(pdfUrl);
+    } catch (error) {
+        console.error('Erro ao enviar ou converter o arquivo:', error);
+    }
+}
+
+function generatePreviewFromPDF(pdfUrl) {
+    pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+        const previewsFolder = 'rg-files/previews';
+        const previewPaths = [];
+
+        const previewContainer = document.getElementById('preview-container');
+        previewContainer.innerHTML = ''; // Limpa qualquer preview anterior
+
+        // Gera os 3 primeiros slides como preview
+        const slidesToPreview = Math.min(3, pdf.numPages);
+        for (let i = 1; i <= slidesToPreview; i++) {
+            pdf.getPage(i).then(page => {
+                const viewport = page.getViewport({ scale: 2 });
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                page.render({ canvasContext: context, viewport }).promise.then(() => {
+                    const slideDataUrl = canvas.toDataURL('image/jpeg', 0.5);
+                    const img = document.createElement('img');
+                    img.src = slideDataUrl;
+                    img.alt = `Slide ${i}`;
+                    previewContainer.appendChild(img);
+                });
+            });
+        }
+    }).catch(error => {
+        console.error('Erro ao processar o PDF:', error);
+    });
+}
+
+
 $(document).ready(function() {
     initializeSelect2();
 });
@@ -58,6 +151,7 @@ $(document).ready(function() {
 document.getElementById('upload-form').addEventListener('submit', async (event) => {
     event.preventDefault();
 
+    const obs = document.getElementById('textbox');
     const inputfile = document.getElementById('inputfile');
     const arquivos = inputfile.files;
 
@@ -68,6 +162,12 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
 
     const project = $('#project-select').val();
     if (!project) {
+        alert('Selecione ou adicione um projeto!');
+        return;
+    }
+
+    const client = $('#client-select').val();
+    if (!client) {
         alert('Selecione ou adicione um projeto!');
         return;
     }
@@ -157,7 +257,7 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
                     const page = await pdf.getPage(i);
                     const viewport = page.getViewport({ scale: 2 });
                     const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
+                    const context = canvas.getContext('2d'); 
                     canvas.width = viewport.width;
                     canvas.height = viewport.height;
 
@@ -178,8 +278,12 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
             db.files.push({
                 id: nextId++,
                 name: nome,
-                type: tipo,
+                extension: tipo,
+                type: $('#file-type').val(),
+                lang: $('#file-lang').val(),
                 project: project,
+                client: client,
+                obs: obs.value,
                 lastModified: ultimaEdicao,
                 importedDate: importacao,
                 previewPaths: previewPaths

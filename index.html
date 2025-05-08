@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Repositório de PowerPoints</title>
-    <link rel="stylesheet" href="styles.css">
 
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -33,14 +32,28 @@
 
         <div id="infos">
             <p class="flex-inputinfo-left" id="filename">Nome: </p>
+            <p class="flex-inputinfo-left" id="year">Ano: </p>
             <select class="flex-inputinfo-right" id="file-type" name="state">
                 <option value="DS">Grafismo</option>
                 <option value="DOC">Documento</option>
                 <option value="PPT">Apresentação</option>
             </select>
+            <select class="flex-inputinfo-right" id="file-lang" name="state">
+                <option>PT</option>
+                <option>ENG</option>
+                <option>FR</option>
+                <option>ES</option>
+            </select>
             <select class="flex-inputinfo-right" id="project-select" name="project"
                 placeholder="Selecione ou adicione um projeto">
             </select>
+            <select class="flex-inputinfo-right" id="client-select" name="client"
+                placeholder="Selecione ou adicione um projeto">
+            </select>
+            <input type="text" id="textbox">
+            <p>Slides:</p>
+
+            <div id="preview-container"></div>
         </div>
 
         <form id="upload-form">

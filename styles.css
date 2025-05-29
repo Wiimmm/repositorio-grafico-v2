@@ -1,0 +1,376 @@
+* {
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background-color: #eaeaea;
+  padding: 1rem;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ul {
+  list-style-type: "";
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+}
+
+.wrapper {
+  padding: 1.25rem;
+  background-color: #fff;
+  max-width: 800px;
+  display: grid;
+  gap: 1.25rem;
+  --br: 0.625rem;
+  --clr-brand: tomato;
+  border-radius: var(--br);
+  box-shadow: 0 0 0.625rem hsl(0 0% 0% / 0.5);
+  container-type: inline-size;
+  container-name: form-cols;
+  margin: 0 auto; /* Added to center the form horizontally */
+}
+
+ul {
+  display: flex;
+  gap: 0.313rem;
+}
+
+.main {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.form {
+  counter-reset: poop-counter;
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-areas:
+    "file-name file-name file-name year"
+    "file-type file-type language language"
+    "project project project project"
+    "client client client client"
+    "comment comment comment comment"
+    "action action action action";
+}
+
+@container form-cols (max-width: 600px) {
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.file-name {
+  grid-area: file-name;
+}
+
+.year {
+  grid-area: year;
+}
+
+.file-type {
+  grid-area: file-type;
+}
+
+.language {
+  grid-area: language;
+}
+
+.project {
+  grid-area: project;
+}
+
+.client {
+  grid-area: client;
+}
+
+.comment {
+  grid-area: comment;
+}
+
+.action {
+  grid-area: action;
+}
+
+label {
+  display: grid;
+  gap: 0.625rem;
+}
+
+label > span {
+  color: var(--clr-brand);
+  font-weight: bold;
+}
+
+label,
+input,
+button,
+select {
+  width: 100%;
+}
+
+input,
+select,
+button,
+textarea {
+  padding: 0.625rem;
+  background-color: #eaeaea;
+  border: 0;
+  border-radius: var(--br);
+}
+
+textarea {
+  height: 5lh;
+  width: 100%;
+  resize: none;
+  padding: 0.625rem 1.25rem;
+  line-height: 1.2;
+}
+
+.tag-list {
+  display: flex;
+  gap: 0.625rem;
+}
+
+.tag-list button {
+  padding: 0.313rem;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 0.313rem;
+}
+
+.tag-list .icon {
+  rotate: 45deg;
+}
+
+.tag-list li {
+  display: flex;
+  gap: 0.313rem;
+  align-items: center;
+  white-space: nowrap;
+  background-color: #eaeaea;
+  padding: 0.313rem 0.625rem;
+  border-radius: var(--br);
+}
+
+button {
+  font-weight: bold;
+}
+
+.btn-action {
+  padding: 1.25rem;
+  background-color: var(--clr-brand);
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.title-1 {
+  font-weight: normal;
+}
+
+.title-2 {
+  text-transform: uppercase;
+  font-weight: normal;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #222;
+  color: #fff;
+}
+
+label:has([required]) .label::after {
+  content: "*";
+}
+
+label:has([required]) .label::before {
+  counter-increment: poop-counter;
+  content: counter(poop-counter) ". ";
+}
+
+.progress {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  width: 100%;
+  height: 0.625rem;
+  border-radius: var(--br);
+  --w: 3px;
+  --w2: calc(var(--w) * 2);
+  box-shadow: 0 0 0 var(--w) #fff, 0 0 0 var(--w2) tomato;
+}
+
+.progress[value]::-webkit-progress-bar {
+  background-color: #222;
+  border-radius: var(--br);
+}
+
+.progress[value]::-webkit-progress-value {
+  background-color: var(--clr-brand);
+  border-radius: var(--br);
+}
+
+.thumbs img {
+  border-radius: 0.625rem;
+}
+
+.info {
+  position: relative;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: .625rem;
+  align-content: end;
+  margin-block: 1.25rem;
+}
+
+.btn-upload {
+  align-self: end;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .625rem;
+  text-transform: uppercase;
+  background-color: #444;
+  color: #fff;
+}
+
+.dialog-body {
+  --br: 0.625rem;
+  --clr-accent: tomato;
+  --clr-dark: #666;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  background-color: #fff;
+  padding: 1.25rem;
+  align-content: start;
+  display: grid;
+  border: 0;
+  gap: 1.25rem;
+  box-shadow: -19px 0 38px rgba(0, 0, 0, 0.3), -15px 0 12px rgba(0, 0, 0, 0.22);
+}
+
+.dialog-body button {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  border-radius: var(--br);
+  padding: 0.625rem;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dialog-body button:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.dialog-body ul {
+  list-style-type: "";
+}
+
+.dialog-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--br);
+  background-color: #eaeaea;
+}
+
+.dialog-body svg {
+  pointer-events: none;
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.dialog-body header {
+  display: flex;
+  gap: 0.313rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dialog-body table {
+  width: 100%;
+}
+
+.dialog-body td {
+  padding: 0.313rem;
+}
+
+.dialog-body td:last-of-type {
+  text-align: right;
+}
+
+.dialog-body .btn-table {
+  background-color: transparent;
+}
+
+.dialog-body .btn-action {
+  width: 100%;
+  display: inline-block;
+  font-weight: bold;
+  color: #fff;
+  padding: 1rem;
+}
+
+.dialog-body .footer-list {
+  display: flex;
+  gap: 0.625rem;
+}
+
+.dialog-body .footer-list li {
+  flex: 1;
+}
+
+.dialog-body .share {
+  background-color: var(--clr-accent);
+}
+
+.dialog-body .download {
+  background-color: var(--clr-dark);
+}
+
+.btn-toggle {
+  font-family: inherit;
+  font-size: inherit;
+  margin-bottom: 30px;
+  background-color: #444;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 14px;
+}

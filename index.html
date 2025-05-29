@@ -1,71 +1,226 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repositório de PowerPoints</title>
-
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-    <!-- Select2 -->
+    <title>Upload de Arquivos</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <!-- PDF.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-    <script>
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-    </script>
-
-    <!-- Google Auth -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-    <!-- Favicon (opcional) -->
-    <link rel="icon" href="data:,">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
 </head>
 
 <body>
-    <header>
-        <button id="auth-button" onclick="handleAuth()">Login com Google</button>
+    <div class="container">
+        <div class="wrapper">
+            <h1 class="title-1">Upload de Arquivos</h1>
 
-        <div id="infos">
-            <p class="flex-inputinfo-left" id="filename">Nome: </p>
-            <p class="flex-inputinfo-left" id="year">Ano: </p>
-            <select class="flex-inputinfo-right" id="file-type" name="state">
-                <option value="DS">Grafismo</option>
-                <option value="DOC">Documento</option>
-                <option value="PPT">Apresentação</option>
-            </select>
-            <select class="flex-inputinfo-right" id="file-lang" name="state">
-                <option>PT</option>
-                <option>ENG</option>
-                <option>FR</option>
-                <option>ES</option>
-            </select>
-            <select class="flex-inputinfo-right" id="project-select" name="project"
-                placeholder="Selecione ou adicione um projeto">
-            </select>
-            <select class="flex-inputinfo-right" id="client-select" name="client"
-                placeholder="Selecione ou adicione um projeto">
-            </select>
-            <input type="text" id="textbox">
-            <p>Slides:</p>
+            <button id="auth-button" class="btn-action" onclick="handleAuth()">Login com Google</button>
 
-            <div id="preview-container"></div>
+            <button id="fileperm" class="btn-action" style="display: none;" onclick="perms()">Permissão de Pasta</button>
+
+            <div id="infos" style="display: none;">
+
+                <input type="file" id="inputfile" accept=".pptx,.docx,.pdf,.jpg,.jpeg,.svg" style="display: none;">
+                <button type="button" class="btn-upload" onclick="document.getElementById('inputfile').click()">
+                    Selecionar Arquivo
+                </button>
+
+                <progress class="progress" id="file" max="100" value="0">0%</progress>
+
+                <div id="preview-container" class="cols thumbs"></div>
+
+                <button style="display: none;"class="btn-toggle" id="btnToggle">Ver informação da versão anterior</button>
+
+                <dialog class="about-dialog" id="aboutDialog">
+
+                    <div class="dialog-body">
+
+                        <header>
+                            <h2>Informações do ficheiro</h2>
+                            <button class="btn-close-dialog" id="btnCloseDialog" autofocus>
+                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                    viewBox="0 0 16 16">
+                                    <path fill="currentColor"
+                                        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                                </svg>
+                            </button>
+                        </header>
+
+                        <img id="snap" src="" alt="" width="150" heigth="100">
+
+                        <h3>Nome</h3>
+                        <ul>
+                            <li><strong id="v-info-name"></strong></li>
+                            <li>
+                                <span id="v-info-filegroup"></span>
+                                <span id="v-info-importeddate"></span>
+                            </li>
+                        </ul>
+
+                        <h3>Informações</h3>
+                        <table>
+                            <tr>
+                                <td>Cliente</td>
+                                <td id="v-info-client"></td>
+                            </tr>
+                            <tr>
+                                <td>Projectos</td>
+                                <td>
+                                    <span id="v-info-project"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Importado</td>
+                                <td>Lorem Ipsum</td>
+                            </tr>
+                            <tr>
+                                <td>Idioma</td>
+                                <td id="v-info-lang"></td>
+                            </tr>
+                        </table>
+
+                        <h3>Observações</h3>
+
+                        <p id="v-info-obs"></p>
+
+                        <h3>Versões Anteriores</h3>
+                        <table>
+                            <tr>
+                                <td>00/00/0000</td>
+                                <td>
+                                    <button class="btn-table" id="btnTableComment" arial-label="Ver comentário">
+                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
+                                            height="15" viewBox="0 0 16 16">
+                                            <g fill="currentColor">
+                                                <path
+                                                    d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                                <path
+                                                    d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                                            </g>
+                                        </svg>
+                                    </button>
+                                    <button aria-hidden="true" class="btn-table" id="btnTableDownload"
+                                        arial-label="Transferir esta versão">
+                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
+                                            height="15" viewBox="0 0 16 16">
+                                            <g fill="currentColor">
+                                                <path
+                                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                                                <path
+                                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                                            </g>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>00/00/0000</td>
+                                <td>
+                                    <button class="btn-table" id="btnTableComment" arial-label="Ver comentário">
+                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
+                                            height="15" viewBox="0 0 16 16">
+                                            <g fill="currentColor">
+                                                <path
+                                                    d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                                <path
+                                                    d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                                            </g>
+                                        </svg>
+                                    </button>
+                                    <button aria-hidden="true" class="btn-table" id="btnTableDownload"
+                                        arial-label="Download desta versão">
+                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
+                                            height="15" viewBox="0 0 16 16">
+                                            <g fill="currentColor">
+                                                <path
+                                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                                                <path
+                                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                                            </g>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <footer>
+                            <ul class="footer-list">
+                                <li><button class="btn-action share" id="btnShare">Link da Partilha</button></li>
+                                <li><button class="btn-action download" id="btnDownload">Download</button></li>
+                            </ul>
+                        </footer>
+                    </div>
+                </dialog>
+
+                <form id="upload-form" class="form" enctype="multipart/form-data">
+
+                    <div class="info file-name">
+                        <label>
+                            <span id="filename">Nome: </span>
+                        </label>
+                    </div>
+
+                    <div class="info year">
+                        <label>
+                            <span id="year">Ano: </span>
+                        </label>
+                    </div>
+
+                    <div class="file-type">
+                        <label>
+                            <span class="label">Tipo de Arquivo</span>
+                            <select id="file-type" required>
+                                <option value="Documento">Documento</option>
+                                <option value="Apresentação">Apresentação</option>
+                                <option value="Grafismo">Grafismo</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="language">
+                        <label>
+                            <span class="label">Idioma</span>
+                            <select id="file-lang" required>
+                                <option value="Português">Português</option>
+                                <option value="Inglês">Inglês</option>
+                                <option value="Francês">Francês</option>
+                                <option value="Espanhol">Espanhol</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="project">
+                        <label>
+                            <span class="label">Projeto</span>
+                            <select id="project-select" multiple></select>
+                        </label>
+                    </div>
+
+                    <div class="client">
+                        <label>
+                            <span class="label">Cliente</span>
+                            <select id="client-select" required></select>
+                        </label>
+                    </div>
+
+                    <div class="comment">
+                        <label>
+                            <span class="label">Observações</span>
+                            <textarea id="textbox" placeholder="Digite suas observações"></textarea>
+                        </label>
+                    </div>
+
+                    <div class="action">
+                        <button type="submit" class="btn-action">Enviar</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <form id="upload-form">
-            <input class="flex-head-left" id="inputfile" type="file">
-            <button class="flex-head-right" type="submit">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16">
-                    <path fill="currentColor" fill-rule="evenodd"
-                        d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
-                </svg>
-            </button>
-        </form>
-    </header>
+    </div>
 
     <script src="script.js"></script>
 </body>

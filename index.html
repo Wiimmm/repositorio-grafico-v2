@@ -20,7 +20,8 @@
 
             <button id="auth-button" class="btn-action" onclick="handleAuth()">Login com Google</button>
 
-            <button id="fileperm" class="btn-action" style="display: none;" onclick="perms()">Permissão de Pasta</button>
+            <button id="fileperm" class="btn-action" style="display: none;" onclick="perms()">Permissão de
+                Pasta</button>
 
             <div id="infos" style="display: none;">
 
@@ -33,7 +34,8 @@
 
                 <div id="preview-container" class="cols thumbs"></div>
 
-                <button style="display: none;"class="btn-toggle" id="btnToggle">Ver informação da versão anterior</button>
+                <button style="display: none;" class="btn-toggle" id="btnToggle">Ver informação da versão
+                    anterior</button>
 
                 <dialog class="about-dialog" id="aboutDialog">
 
@@ -87,66 +89,67 @@
 
                         <p id="v-info-obs"></p>
 
-                        <h3>Versões Anteriores</h3>
-                        <table>
-                            <tr>
-                                <td>00/00/0000</td>
-                                <td>
-                                    <button class="btn-table" id="btnTableComment" arial-label="Ver comentário">
-                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
-                                            height="15" viewBox="0 0 16 16">
-                                            <g fill="currentColor">
-                                                <path
-                                                    d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                                                <path
-                                                    d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button aria-hidden="true" class="btn-table" id="btnTableDownload"
-                                        arial-label="Transferir esta versão">
-                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
-                                            height="15" viewBox="0 0 16 16">
-                                            <g fill="currentColor">
-                                                <path
-                                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                                                <path
-                                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>00/00/0000</td>
-                                <td>
-                                    <button class="btn-table" id="btnTableComment" arial-label="Ver comentário">
-                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
-                                            height="15" viewBox="0 0 16 16">
-                                            <g fill="currentColor">
-                                                <path
-                                                    d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                                                <path
-                                                    d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button aria-hidden="true" class="btn-table" id="btnTableDownload"
-                                        arial-label="Download desta versão">
-                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
-                                            height="15" viewBox="0 0 16 16">
-                                            <g fill="currentColor">
-                                                <path
-                                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                                                <path
-                                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                        </table>
-
+                        <div id="version-list">
+                            <h3>Versões Anteriores</h3>
+                            <table>
+                                <tr>
+                                    <td>00/00/0000</td>
+                                    <td>
+                                        <button class="btn-table" id="btnTableComment" arial-label="Ver comentário">
+                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
+                                                height="15" viewBox="0 0 16 16">
+                                                <g fill="currentColor">
+                                                    <path
+                                                        d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                                    <path
+                                                        d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                                                </g>
+                                            </svg>
+                                        </button>
+                                        <button aria-hidden="true" class="btn-table" id="btnTableDownload"
+                                            arial-label="Transferir esta versão">
+                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
+                                                height="15" viewBox="0 0 16 16">
+                                                <g fill="currentColor">
+                                                    <path
+                                                        d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                                                    <path
+                                                        d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                                                </g>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>00/00/0000</td>
+                                    <td>
+                                        <button class="btn-table" id="btnTableComment" arial-label="Ver comentário">
+                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
+                                                height="15" viewBox="0 0 16 16">
+                                                <g fill="currentColor">
+                                                    <path
+                                                        d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                                    <path
+                                                        d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                                                </g>
+                                            </svg>
+                                        </button>
+                                        <button aria-hidden="true" class="btn-table" id="btnTableDownload"
+                                            arial-label="Download desta versão">
+                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="15"
+                                                height="15" viewBox="0 0 16 16">
+                                                <g fill="currentColor">
+                                                    <path
+                                                        d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                                                    <path
+                                                        d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                                                </g>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                         <footer>
                             <ul class="footer-list">
                                 <li><button class="btn-action share" id="btnShare">Link da Partilha</button></li>

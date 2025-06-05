@@ -112,16 +112,6 @@ async function renderSvgToImage(svgUrl) {
     return imageUrl;
 }
 
-async function getFileIdByName(fileName) {
-    const response = await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and trashed=false`, {
-        headers: {
-            Authorization: 'Bearer ' + accessToken
-        }
-    });
-    const data = await response.json();
-    return data.files && data.files.length > 0 ? data.files[0].id : null;
-}
-
 async function uploadAndConvertToPDF(file, fileType) {
     if (!accessToken) {
         alert('Faça login no Google primeiro!');
@@ -137,32 +127,46 @@ async function uploadAndConvertToPDF(file, fileType) {
         throw new Error('Tipo de arquivo não suportado para conversão');
     }
 
-    const fileName = 'upload'; // Nome fixo que será usado sempre
-    const existingFileId = await getFileIdByName(fileName); // Verifica se o arquivo já existe
-
-    const formData = new FormData();
-    formData.append('metadata', new Blob([JSON.stringify({
-        name: fileName,
-        mimeType
-    })], { type: 'application/json' }));
-    formData.append('file', file);
-
-    const uploadUrl = existingFileId
-        ? `https://www.googleapis.com/upload/drive/v3/files/${existingFileId}?uploadType=multipart&convert=true`
-        : `https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&convert=true`;
+    const fileName = 'upload';
 
     try {
-        const uploadRes = await fetch(uploadUrl, {
-            method: existingFileId ? 'PATCH' : 'POST',
+        // Procurar ficheiro anterior chamado "upload" e apagar
+        const searchRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and trashed=false`, {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + accessToken
+            }
+        });
+
+        const searchData = await searchRes.json();
+        if (searchData.files && searchData.files.length > 0) {
+            for (const oldFile of searchData.files) {
+                await fetch(`https://www.googleapis.com/drive/v3/files/${oldFile.id}`, {
+                    method: 'DELETE',
+                    headers: { Authorization: 'Bearer ' + accessToken }
+                });
+            }
+        }
+
+        // Upload novo com nome "upload" e conversão
+        const formData = new FormData();
+        formData.append('metadata', new Blob([JSON.stringify({
+            name: fileName,
+            mimeType
+        })], { type: 'application/json' }));
+        formData.append('file', file);
+
+        const uploadRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&convert=true', {
+            method: 'POST',
             headers: new Headers({ Authorization: 'Bearer ' + accessToken }),
             body: formData,
         });
 
         const uploadData = await uploadRes.json();
         const fileId = uploadData.id;
-
         document.getElementById('file').value = 50;
 
+        // Exportar como PDF
         const exportRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}/export?mimeType=application/pdf`, {
             method: 'GET',
             headers: { Authorization: 'Bearer ' + accessToken },
@@ -173,8 +177,10 @@ async function uploadAndConvertToPDF(file, fileType) {
         const pdfBlob = await exportRes.blob();
         const pdfUrl = URL.createObjectURL(pdfBlob);
         return pdfUrl;
+
     } catch (error) {
         console.error('Erro ao enviar ou converter o arquivo:', error);
+        alert('Erro ao enviar ou converter o arquivo!');
     }
 }
 
@@ -412,6 +418,11 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
 
     const projects = $('#project-select').val();
     const client = $('#client-select').val();
+
+    if (!projects || projects.length === 0 || !client) {
+        alert('Selecione ou adicione pelo menos um projeto e um cliente!');
+        return;
+    }
 
     try {
         let db = await getDatabase(directoryHandle);

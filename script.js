@@ -416,11 +416,6 @@ document.getElementById('upload-form').addEventListener('submit', async (event) 
     const projects = $('#project-select').val();
     const client = $('#client-select').val();
 
-    if (!projects || projects.length === 0 || !client) {
-        alert('Selecione ou adicione pelo menos um projeto e um cliente!');
-        return;
-    }
-
     try {
         let db = await getDatabase(directoryHandle);
         let nextId = db.files.length > 0 ? Math.max(...db.files.map(item => item.id)) + 1 : 1;

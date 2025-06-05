@@ -272,7 +272,8 @@ label:has([required]) .label::before {
   position: fixed;
   top: 0;
   right: 0;
-  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
   background-color: #fff;
   padding: 1.25rem;
   align-content: start;

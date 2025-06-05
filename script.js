@@ -1,4 +1,4 @@
-const CLIENT_ID = '731258606855-s027dr73u4a1p7r4449321oq5onq4isv.apps.googleusercontent.com';
+const CLIENT_ID = '25371662123-opqktsrvje4ab91s0i9e4lt0bgvmo1g2.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly';
 let accessToken;
 let directoryHandle;
@@ -130,7 +130,6 @@ async function uploadAndConvertToPDF(file, fileType) {
     const fileName = 'upload';
 
     try {
-        // Procurar ficheiro anterior chamado "upload" e apagar
         const searchRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and trashed=false`, {
             method: 'GET',
             headers: {
@@ -148,7 +147,6 @@ async function uploadAndConvertToPDF(file, fileType) {
             }
         }
 
-        // Upload novo com nome "upload" e conversão
         const formData = new FormData();
         formData.append('metadata', new Blob([JSON.stringify({
             name: fileName,
@@ -166,7 +164,6 @@ async function uploadAndConvertToPDF(file, fileType) {
         const fileId = uploadData.id;
         document.getElementById('file').value = 50;
 
-        // Exportar como PDF
         const exportRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}/export?mimeType=application/pdf`, {
             method: 'GET',
             headers: { Authorization: 'Bearer ' + accessToken },
@@ -181,6 +178,7 @@ async function uploadAndConvertToPDF(file, fileType) {
     } catch (error) {
         console.error('Erro ao enviar ou converter o arquivo:', error);
         alert('Erro ao enviar ou converter o arquivo!');
+    }
 }
 
 

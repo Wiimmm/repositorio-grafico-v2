@@ -137,8 +137,8 @@ async function uploadAndConvertToPDF(file, fileType) {
         throw new Error('Tipo de arquivo não suportado para conversão');
     }
 
-    const fileName = 'upload'; // Nome fixo que será usado sempre
-    const existingFileId = await getFileIdByName(fileName); // Verifica se o arquivo já existe
+    const fileName = 'upload'; 
+    const existingFileId = await getFileIdByName(fileName);
 
     const formData = new FormData();
     formData.append('metadata', new Blob([JSON.stringify({

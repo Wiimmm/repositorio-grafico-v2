@@ -181,7 +181,6 @@ async function uploadAndConvertToPDF(file, fileType) {
     } catch (error) {
         console.error('Erro ao enviar ou converter o arquivo:', error);
         alert('Erro ao enviar ou converter o arquivo!');
-    }
 }
 
 

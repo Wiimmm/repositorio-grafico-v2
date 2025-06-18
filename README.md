@@ -1,6 +1,6 @@
 <h1>DISCLAIMER !!!</h1>
 <h2>The base of this project uses external APIs </h2>
-Google Drive API and Google Slides API. <br>
+Google Drive API, Google Slides API and Google Docs API. <br>
 Before using check and change the Client ID to yours.<br>
 <h1>Use LiveServer </h1>
 Config Live Server to ignore files:

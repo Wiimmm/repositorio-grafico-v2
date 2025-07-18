@@ -1,4 +1,4 @@
-const CLIENT_ID = '25371662123-opqktsrvje4ab91s0i9e4lt0bgvmo1g2.apps.googleusercontent.com';
+const CLIENT_ID = '731258606855-s027dr73u4a1p7r4449321oq5onq4isv.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly';
 let accessToken;
 let directoryHandle;
